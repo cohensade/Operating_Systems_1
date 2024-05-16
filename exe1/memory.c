@@ -4,10 +4,9 @@
 
 
 void accessUninitializedMemory() {
-    int arr[5]; // Array declaration without initialization
+      int* uninitialized_ptr = (int*)0xdeadbeef;
 
-    // Attempt to access elements of the array without initializing it
-    for (int i = 0; i < 5; i++) {
-        printf("%d\n", arr[i]); // Accessing uninitialized memory
-    }
+    // קריאה מצביע שלא הוגדר
+    printf("Uninitialized pointer: %d\n", *uninitialized_ptr);
+
 }
