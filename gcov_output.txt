@@ -1,0 +1,121 @@
+        -:    0:Source:dj.c
+        -:    0:Graph:dj.gcno
+        -:    0:Data:dj.gcda
+        -:    0:Runs:10
+        -:    1:#include <stdio.h>
+        -:    2:#include <stdlib.h>
+        -:    3:#include <limits.h>
+        -:    4:#include <stdbool.h>
+        -:    5:
+        -:    6:// A utility function to find the vertex with minimum distance value
+       10:    7:int minDistance(int dist[], bool visit[], int V) 
+        -:    8:{
+       10:    9:    int min = INT_MAX, min_index; //set min to infinity and declare of min_index (represent the vertex with the min dis)
+       38:   10:    for (int u = 0; u < V; u++)
+       28:   11:        if (!visit[u] && dist[u] <= min) //if vertex u is not visited yet and his dist his smaller then current min 
+       11:   12:            min = dist[u], min_index = u;//update min and min_index 
+       10:   13:    return min_index; //return the min index
+        -:   14:}
+        -:   15:
+        -:   16:// A utility function to print the constructed distance array
+        7:   17:void printSolution(int dist[], int V) {
+        7:   18:    printf("Vertex: \t \t \t Distance from Source:\n");
+       24:   19:    for (int i = 0; i < V; i++)
+       17:   20:        printf("%d \t \t \t \t %d\n", i, dist[i]);
+        7:   21:}
+        -:   22:
+        -:   23:// Function that implements Dijkstra's single source shortest path algorithm
+        7:   24:void dijkstra(int **graph, int src, int V) 
+        7:   25:{
+        7:   26:    int dist[V]; // The output array. dist[i] will hold the shortest distance from src to i
+        7:   27:    bool visit[V]; // visit[i] will be true if vertex i is included in shortest path 
+        -:   28:
+       24:   29:    for (int i = 0; i < V; i++)
+        -:   30:    {
+       17:   31:        dist[i] = INT_MAX, visit[i] = false; //set all the distances to infinity and visit to false
+        -:   32:    }
+        7:   33:    dist[src] = 0; //set the src vetex dist to 0(starting point)
+        -:   34:
+       17:   35:    for (int count = 0; count < V - 1; count++) //relax phase
+        -:   36:    {
+       10:   37:        int u = minDistance(dist, visit, V);// every time we set the index of min dist to vertex u
+       10:   38:        visit[u] = true; //cause we reach vertex u now he is visited
+        -:   39:
+       38:   40:        for (int i = 0; i < V; i++)
+        -:   41:        {
+       28:   42:            if (!visit[i] && graph[u][i] && dist[u] != INT_MAX && dist[u] + graph[u][i] < dist[i])
+        8:   43:                dist[i] = dist[u] + graph[u][i]; //relax the edge
+        -:   44:        }
+        -:   45:    }
+        -:   46:
+        7:   47:    printSolution(dist, V);//print all the shortestpaths from vertex src to all as matrix
+        7:   48:}
+        -:   49:
+        -:   50:// Function to validate input
+       14:   51:bool validateGraph(int **graph, int V) 
+        -:   52:{
+       33:   53:    for (int i = 0; i < V; ++i) {
+       80:   54:        for (int j = 0; j < V; ++j) {
+       61:   55:            if (graph[i][j] < 0) // Dijkstra's algorithm doesn't support negative weights
+        6:   56:                return false;
+        -:   57:        }
+        -:   58:    }
+        8:   59:    return true;
+        -:   60:}
+        -:   61:
+       24:   62:int main() 
+        -:   63:{
+        -:   64:    while (1) 
+       14:   65:    {
+        -:   66:        int V;
+       24:   67:        printf("New graph: \n");
+       24:   68:        printf("Enter number of vertices: ");
+       24:   69:        if (scanf("%d", &V) != 1 || V <= 0) break; // check that scanf is valid and that num of vertex > 0
+        -:   70:
+       14:   71:        int **graph = (int **)malloc(V * sizeof(int *)); //memory allocation for adj matrix
+       45:   72:        for (int i = 0; i < V; i++) 
+        -:   73:        {
+       31:   74:            graph[i] = (int *)malloc(V * sizeof(int)); // memory allocation for every row
+        -:   75:        }
+        -:   76:
+       14:   77:       printf("Enter the graph as an adjacency matrix:\n");
+       14:   78:        bool validInput = true;
+       41:   79:        for (int i = 0; i < V; ++i) 
+        -:   80:        {
+       96:   81:            for (int j = 0; j < V; ++j) 
+        -:   82:            {
+       69:   83:                if (scanf("%d", &graph[i][j]) != 1) { // Validate that input is an integer
+        2:   84:                    validInput = false;
+        2:   85:                    break;
+        -:   86:                }
+        -:   87:            }
+       29:   88:            if (!validInput) break;
+        -:   89:        }
+        -:   90:
+       14:   91:        if (!validateGraph(graph, V)) //check if the graph is valid
+        -:   92:        {
+        6:   93:            printf("Invalid graph input. Please enter again.\n");
+       18:   94:            for (int i = 0; i < V; i++) free(graph[i]);//if the graph isnt valid we will free the memory and continue the loop  
+        6:   95:            free(graph);
+        7:   96:            continue;
+        -:   97:        }
+        -:   98:
+        -:   99:        int src; //set src vertex to start with
+        8:  100:        printf("Enter source vertex: ");
+        8:  101:        if (scanf("%d", &src) != 1 || src < 0 || src >= V) 
+        -:  102:        {//if scanf is invalid or src is negative or greater then num of vertices we cant run the algo
+        1:  103:            printf("Invalid source vertex. Please enter again.\n");
+        3:  104:            for (int i = 0; i < V; i++) free(graph[i]);
+        1:  105:            free(graph); //free the memory of the graph and continue the loop
+        1:  106:            continue;
+        -:  107:        }
+        -:  108:
+        7:  109:        dijkstra(graph, src, V);//run dijkstra algo from src vertex to all vertices
+        -:  110:
+       24:  111:        for (int i = 0; i < V; i++) free(graph[i]);
+        7:  112:        free(graph); // after we finish with the graph we will free the memory
+        -:  113:    }
+        -:  114:
+       10:  115:    return 0;
+        -:  116:}
+
