@@ -1,13 +1,13 @@
 CC = gcc
 CFLAGS = -std=c11 -Wall -g
 
-all: main
+all: exe1
 
-main: main.o memory.o stack_over_flow.o divide_by_zero.o
-	$(CC) $(CFLAGS) -o main main.o memory.o stack_over_flow.o divide_by_zero.o
+exe1: exe1.o memory.o stack_over_flow.o divide_by_zero.o
+	$(CC) $(CFLAGS) -o exe1 exe1.o memory.o stack_over_flow.o divide_by_zero.o
 
-main.o: main.c
-	$(CC) $(CFLAGS) -c main.c
+exe1.o: exe1.c
+	$(CC) $(CFLAGS) -c exe1.c
 
 memory.o: memory.c memory.h
 	$(CC) $(CFLAGS) -c memory.c
@@ -20,5 +20,5 @@ divide_by_zero.o: divide_by_zero.c divide_by_zero.h
 
 
 clean:
-	rm -f *.o main core
+	rm -f *.o exe1 core
 

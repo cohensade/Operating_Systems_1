@@ -3,10 +3,10 @@ CFLAGS = -Wall -Wextra -g -fprofile-arcs -ftest-coverage
 
 TARGET = dj
 
-all: $(TARGET)
+all: exe4
 
-$(TARGET): $(TARGET).c
-	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).c
+exe4: $(TARGET).c
+	$(CC) $(CFLAGS) -o exe4 $(TARGET).c
 
 run: $(TARGET)
 	./$(TARGET)
@@ -18,4 +18,4 @@ coverage: $(TARGET)
 	./$(TARGET)
 	gcov $(TARGET).c
 
-.PHONY: all run clean coverage
+.PHONY: all run clean coverage exe4

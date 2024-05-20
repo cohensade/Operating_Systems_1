@@ -1,6 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <ctype.h>
+
+int is_valid_number( char *number) {
+    while (*number) {
+        if (!isdigit(*number) )  {
+            return 0;
+        }
+        number++;
+    }
+    return 1;
+}
 
 int main(int argc, char *argv[]) 
 {
@@ -10,9 +21,20 @@ int main(int argc, char *argv[])
         printf("Error\n");
         return 1;
     }
+    
+    if (!is_valid_number(argv[1]) || !is_valid_number(argv[2]))
+    {
+        printf("The input is not including only numbers\n");
+        return 1;
+    }
+    
+    
+    
     //take the args k and 𝜆 to k and gimel(aka 𝜆)
     long double gimel = strtold(argv[1], NULL);// argv[1] = 𝜆 
     long k = strtol(argv[2], NULL, 10); //argv[2] = k
+
+
 
     // px(k) = (e^(-𝜆) * 𝜆^k) / k! calc the probability of poisson by using math.h
     long double probability = (expf(-gimel) * powl(gimel, k)) / tgammal(k + 1);

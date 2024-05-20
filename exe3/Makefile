@@ -1,9 +1,9 @@
 CC = gcc
 
-all: libpoisson.so main
+all: libpoisson.so exe3
 
-main: main.c Poisson.h libpoisson.so
-	$(CC) -o main main.c -L. -lpoisson -lm
+exe3: main.c Poisson.h libpoisson.so
+	$(CC) -o exe3 main.c -L. -lpoisson -lm
 
 libpoisson.so: Poisson.c Poisson.h
 	$(CC) -shared -fPIC -o libpoisson.so Poisson.c -lm
@@ -12,5 +12,5 @@ libpoisson.so: Poisson.c Poisson.h
 
 
 clean:
-	$(RM) libpoisson.so main
+	$(RM) libpoisson.so main exe3
 
